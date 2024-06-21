@@ -1,0 +1,17 @@
+{
+	"name": "ramizafzal/plugin-prefix",
+	"type": "project",
+	"license": "GPL",
+	"authors": [
+		{
+			"name": "Ramiz Afzal",
+			"email": "m.ramiz.afzal@gmail.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"autoload": {
+		"psr-4": {
+			"PLUGIN_NAMESPACE\\": "./inc"
+		}
+	}
+}
