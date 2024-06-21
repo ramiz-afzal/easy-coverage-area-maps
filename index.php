@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Plugin Name:       Plugin Name
+ * Plugin Name:       Easy Coverage Area Maps
  * Plugin URI:        mailto:m.ramiz.afzal@gmail.com
- * Description:       Plugin Description
+ * Description:       Easily display coverage areas of your services on a map
  * Version:           1.0.0
  * Requires at least: 6.1
  * Requires PHP:      7.4
@@ -22,21 +22,21 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
 }
 
 // load global variables
-if (class_exists('PLUGIN_NAMESPACE\\Base\\Variable')) {
-    PLUGIN_NAMESPACE\Base\Variable::LOAD_VARIABLES(__FILE__);
+if (class_exists('EASY_COVERAGE_AREA_MAPS\\Base\\Variable')) {
+    EASY_COVERAGE_AREA_MAPS\Base\Variable::LOAD_VARIABLES(__FILE__);
 }
 
 // plugin activation callback
-if (class_exists('PLUGIN_NAMESPACE\\Base\\Activate')) {
-    PLUGIN_NAMESPACE\Base\Activate::activate(__FILE__);
+if (class_exists('EASY_COVERAGE_AREA_MAPS\\Base\\Activate')) {
+    EASY_COVERAGE_AREA_MAPS\Base\Activate::activate(__FILE__);
 }
 
 // plugin deactivation callback
-if (class_exists('PLUGIN_NAMESPACE\\Base\\Deactivate')) {
-    PLUGIN_NAMESPACE\Base\Deactivate::deactivate(__FILE__);
+if (class_exists('EASY_COVERAGE_AREA_MAPS\\Base\\Deactivate')) {
+    EASY_COVERAGE_AREA_MAPS\Base\Deactivate::deactivate(__FILE__);
 }
 
 // load plugin services
-if (class_exists('PLUGIN_NAMESPACE\\Init')) {
-    PLUGIN_NAMESPACE\Init::register_services();
+if (class_exists('EASY_COVERAGE_AREA_MAPS\\Init')) {
+    EASY_COVERAGE_AREA_MAPS\Init::register_services();
 }

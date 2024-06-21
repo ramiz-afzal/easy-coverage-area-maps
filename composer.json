@@ -1,5 +1,5 @@
 {
-	"name": "ramizafzal/plugin-prefix",
+	"name": "ramizafzal/easy-coverage-area-maps",
 	"type": "project",
 	"license": "GPL",
 	"authors": [
@@ -11,7 +11,7 @@
 	"minimum-stability": "dev",
 	"autoload": {
 		"psr-4": {
-			"PLUGIN_NAMESPACE\\": "./inc"
+			"EASY_COVERAGE_AREA_MAPS\\": "./inc"
 		}
 	}
 }

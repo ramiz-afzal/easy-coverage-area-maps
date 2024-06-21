@@ -1,6 +1,6 @@
 <?php
 
-namespace PLUGIN_NAMESPACE\Base;
+namespace EASY_COVERAGE_AREA_MAPS\Base;
 
 if (!defined('ABSPATH')) exit;
 

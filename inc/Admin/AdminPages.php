@@ -1,8 +1,8 @@
 <?php
 
-namespace PLUGIN_NAMESPACE\Admin;
+namespace EASY_COVERAGE_AREA_MAPS\Admin;
 
-use PLUGIN_NAMESPACE\Base\Variable;
+use EASY_COVERAGE_AREA_MAPS\Base\Variable;
 
 if (!defined('ABSPATH')) exit;
 

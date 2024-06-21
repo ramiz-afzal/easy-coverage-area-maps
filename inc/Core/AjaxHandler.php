@@ -1,9 +1,9 @@
 <?php
 
-namespace PLUGIN_NAMESPACE\Core;
+namespace EASY_COVERAGE_AREA_MAPS\Core;
 
-use PLUGIN_NAMESPACE\Base\Functions;
-use PLUGIN_NAMESPACE\Base\Constant;
+use EASY_COVERAGE_AREA_MAPS\Base\Functions;
+use EASY_COVERAGE_AREA_MAPS\Base\Constant;
 
 class AjaxHandler
 {
