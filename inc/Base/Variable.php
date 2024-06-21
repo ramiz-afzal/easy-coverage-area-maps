@@ -10,8 +10,6 @@ final class Variable
     public static function LOAD_VARIABLES($__FILE__)
     {
         self::$VARIABLES['PREFIX']                      = 'easy-coverage-area-maps';
-        self::$VARIABLES['ADMIN_PAGE']                  = 'easy-coverage-area-maps-settings';
-        self::$VARIABLES['TRANSLATION_DOMAIN']          = 'easyCoverageAreaMaps';
         self::$VARIABLES['URL']                         = plugin_dir_url($__FILE__);
         self::$VARIABLES['PATH']                        = plugin_dir_path($__FILE__);
         self::$VARIABLES['BASENAME']                    = plugin_basename($__FILE__);

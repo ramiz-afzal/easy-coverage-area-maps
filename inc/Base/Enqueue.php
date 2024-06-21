@@ -37,7 +37,8 @@ class Enqueue
 
     public function enqueue_frontend_files()
     {
-        wp_enqueue_style(Functions::with_uuid('frontend-styles'), Functions::css_file('frontend.css'), [], Functions::get_uuid());
+        wp_register_style(Functions::with_uuid('frontend-styles'), Functions::css_file('frontend.css'), [], Functions::get_uuid());
+        wp_register_script(Functions::with_uuid('frontend-script'), Functions::js_file('frontend.js'), [], Functions::get_uuid(), false);
 
         if (Variable::GET('LOCALIZE_JS_OBJECT')) {
             $script_variables = ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('ajax_security')];

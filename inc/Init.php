@@ -9,10 +9,13 @@ final class Init
     public static function get_services()
     {
         return array(
+            Base\Enqueue::class,
+            Admin\AdminPages::class,
+            Admin\CustomMetaBoxes::class,
             Core\Shortcode::class,
             Core\AjaxHandler::class,
             Core\WordPressHooks::class,
-            Admin\AdminPages::class,
+            Core\CustomPostTypes::class,
         );
     }
 
