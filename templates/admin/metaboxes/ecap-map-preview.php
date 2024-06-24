@@ -1,1 +1,1 @@
-<h3><?= $args['id']; ?></h3>
+<div id="ecap-map-preview-root" data-post-id="<?= $post_id; ?>"></div>

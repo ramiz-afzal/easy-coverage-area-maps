@@ -72,11 +72,15 @@ class CustomMetaBoxes
 
     public function render_custom_metabox($post = null, $args = null)
     {
+        if (empty($post)) {
+            return;
+        }
+
         $meta_box_id = $args && isset($args['id']) ? $args['id'] : null;
         if (empty($meta_box_id)) {
             return;
         }
 
-        Functions::get_template("admin/metaboxes/{$meta_box_id}.php", ['args' => $args], true);
+        Functions::get_template("admin/metaboxes/{$meta_box_id}.php", ['post_id' => $post->ID, 'args' => $args], true);
     }
 }
