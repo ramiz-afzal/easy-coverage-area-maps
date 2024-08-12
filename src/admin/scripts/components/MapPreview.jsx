@@ -15,7 +15,10 @@ const MapPreview = function () {
 		}
 
 		const map = L.map('map-wrapper').setView([51.505, -0.09], 13);
-		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		}).addTo(map);
 
 		const customIcon = L.icon({
 			iconUrl: iconUrl,
@@ -25,6 +28,14 @@ const MapPreview = function () {
 
 		L.marker([51.5, -0.09], { icon: customIcon }).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.');
 		L.marker([51.5, -0.99], { icon: customIcon }).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.');
+
+		L.polygon([
+			[51.509, -0.08],
+			[51.503, -0.06],
+			[51.51, -0.047],
+		])
+			.addTo(map)
+			.bindPopup('A pretty CSS3 popup.<br> Easily customizable.');
 
 		setMapState(1);
 	};

@@ -22,8 +22,8 @@ class CustomMetaBoxes
         return array(
             Constant::CPT_CUSTOM_AREA_MAPS => array(
                 array(
-                    'id'            => Constant::META_BOX_MAP_PREVIEW,
-                    'title'         => 'Preview',
+                    'id'            => Constant::META_BOX_MAP_REGIONS,
+                    'title'         => 'Regions',
                     'callback'      => [$object_context, 'render_custom_metabox'],
                     'screen'        => Constant::CPT_CUSTOM_AREA_MAPS,
                     'context'       => 'normal',
@@ -31,8 +31,8 @@ class CustomMetaBoxes
                     'callback_args' => null,
                 ),
                 array(
-                    'id'            => Constant::META_BOX_MAP_OPTIONS,
-                    'title'         => 'Options',
+                    'id'            => Constant::META_BOX_MAP_PREVIEW,
+                    'title'         => 'Preview',
                     'callback'      => [$object_context, 'render_custom_metabox'],
                     'screen'        => Constant::CPT_CUSTOM_AREA_MAPS,
                     'context'       => 'normal',

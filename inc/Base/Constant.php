@@ -18,5 +18,5 @@ final class Constant
 
     // custom meta boxes
     const META_BOX_MAP_PREVIEW  = 'ecap-map-preview';
-    const META_BOX_MAP_OPTIONS  = 'ecap-map-options';
+    const META_BOX_MAP_REGIONS  = 'ecap-map-regions';
 }
