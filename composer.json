@@ -13,5 +13,8 @@
 		"psr-4": {
 			"EASY_COVERAGE_AREA_MAPS\\": "./inc"
 		}
+	},
+	"require": {
+		"htmlburger/carbon-fields": "dev-development"
 	}
 }

@@ -11,7 +11,7 @@ final class Init
         return array(
             Base\Enqueue::class,
             Admin\AdminPages::class,
-            Admin\CustomMetaBoxes::class,
+            Admin\CustomFields::class,
             Core\Shortcode::class,
             Core\AjaxHandler::class,
             Core\WordPressHooks::class,

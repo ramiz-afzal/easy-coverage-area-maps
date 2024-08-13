@@ -1,1 +1,0 @@
-<div id="ecap-map-preview-root" data-post-id="<?= $post_id; ?>"></div>
