@@ -101,11 +101,14 @@ window.addEventListener(
 
 						map.on('load', () => {
 							// TODO for debugging
-							map.on('click', (e) => {
-								const { lng, lat } = e.lngLat;
-								console.log('lat', lat);
-								console.log('long', lng);
-							});
+							let currentURL = new URL(window.location.href);
+							if (currentURL.searchParams.has('debug')) {
+								map.on('click', (e) => {
+									const { lng, lat } = e.lngLat;
+									console.log('lat', lat);
+									console.log('long', lng);
+								});
+							}
 
 							// if region and statuses data exists
 							if (regions && regions.length !== 0 && regionStatuses && regionStatuses.length !== 0) {
@@ -167,6 +170,7 @@ window.addEventListener(
 									status: {
 										title: 'Unavailable',
 										color: '#585858',
+										desc: 'This address is currently not in our coverage area.',
 									},
 								};
 
@@ -223,11 +227,33 @@ window.addEventListener(
 									onSelection: async (address) => {
 										const { latitude, longitude, formattedAddress } = address;
 										const intersectingRegion = getAddressRegion(latitude, longitude);
+										if (!intersectingRegion || !intersectingRegion.status) {
+											return;
+										}
+
 										// TODO update popup html to reflect intersectingRegion status
+										// set geo location
 										userLocation.setLngLat([longitude, latitude]);
-										userLocation.setPopup(Radar.ui.popup({ html: `<h2>${formattedAddress}</h2>` }));
+
+										// generate HTML
+										let html = '';
+										html += `<div class="ecap-point-address">`;
+										html += `<h3>Address:</h3>`;
+										html += `<p>${formattedAddress}</p>`;
+										html += '</div>';
+										html += `<div class="ecap-region-status" style="border-color: ${intersectingRegion.status.color};">`;
+										html += '<div class="ecap-status-content">';
+										html += `<h3 class="ecap-status-title">${intersectingRegion.status.title}</h3>`;
+										html += `<div class="ecap-status-desc">${intersectingRegion.status.desc}</div>`;
+										html += '</div>';
+										html += '</div>';
+
+										// append popup
+										userLocation.setPopup(Radar.ui.popup({ html: html }));
 										userLocation.addTo(map);
 										await map.flyTo({ center: [longitude, latitude], zoom: 14 });
+
+										// open popup
 										userLocation.togglePopup();
 									},
 								});
