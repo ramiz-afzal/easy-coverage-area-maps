@@ -4,6 +4,7 @@ namespace EASY_COVERAGE_AREA_MAPS\Base;
 
 use EASY_COVERAGE_AREA_MAPS\Base\Variable;
 use EASY_COVERAGE_AREA_MAPS\Base\Functions;
+use EASY_COVERAGE_AREA_MAPS\Core\RadarApi;
 
 if (!defined('ABSPATH')) exit;
 
@@ -40,8 +41,16 @@ class Enqueue
         wp_register_style(Functions::with_uuid('frontend-styles'), Functions::css_file('frontend.css'), [], Functions::get_uuid());
         wp_register_script(Functions::with_uuid('frontend-script'), Functions::js_file('frontend.js'), [], Functions::get_uuid(), false);
 
+        // Radar Scripts
+        wp_register_style(Functions::with_uuid('radar-styles'), 'https://js.radar.com/v4.4.0/radar.css', [], Functions::get_uuid());
+        wp_register_script(Functions::with_uuid('radar-script'), 'https://js.radar.com/v4.4.0/radar.min.js', [], Functions::get_uuid(), false);
+
         if (Variable::GET('LOCALIZE_JS_OBJECT')) {
             $script_variables = ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('ajax_security')];
+            $api_keys = RadarApi::get_api_keys();
+            if (!empty($api_keys) && isset($api_keys['public_key'])) {
+                $script_variables['radar_pk'] = $api_keys['public_key'];
+            }
             wp_localize_script(Functions::with_uuid('frontend-script'), Variable::GET('JS_OBJECT_NAME'), $script_variables);
         }
     }

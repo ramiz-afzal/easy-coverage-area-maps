@@ -32,6 +32,21 @@ class CustomPostTypes
                 'exclude_from_search'   => true,
                 'show_in_menu'          => Constant::SLUG_ADMIN_MENU,
             ),
+            Constant::CPT_CUSTOM_STATUS => array(
+                'labels'                => self::generate_cpt_labels('Statuses', 'Status'),
+                'public'                => false,
+                'publicly_queryable'    => false,
+                'hierarchical'          => false,
+                'show_in_nav_menus'     => false,
+                'rewrite'               => false,
+                'query_var'             => false,
+                'capability_type'       => 'post',
+                'supports'              => ['title'],
+                'has_archive'           => false,
+                'show_ui'               => true,
+                'exclude_from_search'   => true,
+                'show_in_menu'          => Constant::SLUG_ADMIN_MENU,
+            ),
         ];
     }
 
@@ -48,6 +63,24 @@ class CustomPostTypes
             if (!empty($custom_post_types)) {
                 foreach ($custom_post_types as $post_type_key => $post_type_args) {
                     register_post_type($post_type_key, $post_type_args);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 
+     */
+    public function register_custom_taxonomies()
+    {
+        if (function_exists('register_taxonomy')) {
+
+            $custom_taxonomies = self::get_custom_taxonomy();
+
+            if (!empty($custom_taxonomies)) {
+                foreach ($custom_taxonomies as $taxonomy) {
+                    register_taxonomy($taxonomy['slug'], $taxonomy['object'], $taxonomy['args']);
                 }
             }
         }

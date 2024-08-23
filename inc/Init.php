@@ -12,6 +12,7 @@ final class Init
             Base\Enqueue::class,
             Admin\AdminPages::class,
             Admin\CustomFields::class,
+            Admin\AdminColumns::class,
             Core\Shortcode::class,
             Core\AjaxHandler::class,
             Core\WordPressHooks::class,

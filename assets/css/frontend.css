@@ -1,0 +1,63 @@
+.ecap-map-main {
+	width: 100%;
+	max-width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	gap: 20px;
+}
+.ecap-map-main .ecap-status-wrapper {
+	width: 230px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 20px;
+}
+.ecap-map-main .ecap-status-wrapper .ecap-region-status {
+	width: 100%;
+	max-width: 100%;
+	border-style: solid;
+	border-left-width: 10px;
+}
+.ecap-map-main .ecap-status-wrapper .ecap-region-status .ecap-status-content {
+	width: 100%;
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+	padding: 10px;
+}
+.ecap-map-main .ecap-status-wrapper .ecap-region-status .ecap-status-content .ecap-status-title,
+.ecap-map-main .ecap-status-wrapper .ecap-region-status .ecap-status-content .ecap-status-desc {
+	padding: 0;
+	margin: 0;
+}
+.ecap-map-main .ecap-status-wrapper .ecap-region-status .ecap-status-content .ecap-status-title {
+	font-size: 16px;
+}
+.ecap-map-main .ecap-status-wrapper .ecap-region-status .ecap-status-content .ecap-status-desc {
+	line-height: 1.2em;
+	font-size: 12px;
+}
+.ecap-map-main .ecap-map-wrapper {
+	position: relative;
+	flex-grow: 1;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+}
+.ecap-map-main .ecap-map-wrapper .ecap-map {
+	width: 100%;
+	max-width: 100%;
+	min-height: 500px;
+	flex-grow: 1;
+}
+.ecap-map-main .ecap-map-wrapper .ecap-autocomplete {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	width: 500px;
+	max-width: 100%;
+}
+.ecap-map-main .ecap-map-wrapper .ecap-autocomplete input[type='text'] {
+	padding-left: 40px;
+}

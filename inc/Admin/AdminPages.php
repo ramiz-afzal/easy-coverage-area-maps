@@ -25,7 +25,7 @@ class AdminPages
     {
         return array(
             array(
-                'page_title'    => 'Easy Coverage Area Maps',
+                'page_title'    => 'Coverage Maps',
                 'menu_title'    => 'Coverage Maps',
                 'capability'    => 'manage_options',
                 'menu_slug'     => Constant::SLUG_ADMIN_MENU,
@@ -49,7 +49,7 @@ class AdminPages
         $current_view = AdminPages::get_current_view();
         if (!empty($current_view)) {
             $template_path = Functions::get_template_file("admin/pages/{$current_view}.php");
-            if (file_exists($template_path)) {
+            if (!empty($template_path)) {
                 require_once($template_path);
             }
         }
