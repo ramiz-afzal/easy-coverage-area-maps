@@ -36,6 +36,28 @@ class AjaxHandler
                 wp_die();
             }
 
+            foreach ($regions as &$region) {
+                if (!isset($region[Functions::prefix('coordinates')]) || empty($region[Functions::prefix('coordinates')])) {
+                    continue;
+                }
+
+                $file_path = get_attached_file($region[Functions::prefix('coordinates')]);
+                if (!file_exists($file_path)) {
+                    continue;
+                }
+
+                $file_data = file_get_contents($file_path);
+                if (empty($file_data)) {
+                    continue;
+                }
+
+                $file_data = json_decode($file_data, true);
+                if (!isset($file_data['geometry']) || !isset($file_data['geometry']['coordinates'])) {
+                    continue;
+                }
+                $region[Functions::prefix('coordinates')] = $file_data['geometry']['coordinates'];
+            }
+
             $regions = json_decode(str_replace(str_replace('-', '_', Variable::GET('PREFIX')) . "_", '', json_encode($regions)), true);
 
             wp_send_json_success(['regions' => $regions]);

@@ -5,11 +5,16 @@ defined('ABSPATH') or die();
 <div class="wrap">
     <section>
         <table class="wp-list-table widefat fixed striped table-view-list">
+            <thead>
+                <tr>
+                    <th>Shortcode</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
             <tbody class="the-list">
                 <tr>
-                    <td>
-                        <span id="dpwp-progress-message">Fetching Data...</span>
-                    </td>
+                    <td><code>[ecap_map id="12345"]</code></td>
+                    <td>Displays a defined service area map on the frontend</td>
                 </tr>
             </tbody>
         </table>

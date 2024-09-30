@@ -9,7 +9,8 @@ class WordPressHooks
 {
     public function register()
     {
-        // register actions/filters here
+        // register .json file types
+        add_filter('upload_mimes', [$this, 'register_custom_mime_types']);
     }
 
     /**
@@ -62,6 +63,21 @@ class WordPressHooks
         } catch (\Throwable $error) {
             Functions::debug_log("Error occurred: " . $error->getMessage());
             return [];
+        }
+    }
+
+
+    /**
+     * @param array $mimes
+     * @return array $mimes
+     */
+    public function register_custom_mime_types($mimes)
+    {
+        try {
+            return array_merge($mimes, ['json' => 'text/plain', 'geojson' => 'text/plain']);
+        } catch (\Throwable $error) {
+            Functions::debug_log("Error occurred: " . $error->getMessage());
+            return $mimes;
         }
     }
 }

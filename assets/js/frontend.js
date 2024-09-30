@@ -114,9 +114,8 @@ window.addEventListener(
 							if (regions && regions.length !== 0 && regionStatuses && regionStatuses.length !== 0) {
 								// setup regions
 								regions.forEach(async function (region) {
-									let coordinates = region.coordinate_groups && region.coordinate_groups.length !== 0 ? region.coordinate_groups.map((x) => [parseFloat(x.lat), parseFloat(x.long)]) : [];
+									let coordinates = region.coordinates ? region.coordinates : [];
 									if (coordinates.length !== 0) {
-										// create new feature from GeoJSON Feature
 										let polygonId = ecap.guid();
 										const geojson = {
 											type: 'Feature',
@@ -126,7 +125,7 @@ window.addEventListener(
 											},
 											geometry: {
 												type: 'Polygon',
-												coordinates: [coordinates],
+												coordinates: coordinates,
 											},
 										};
 

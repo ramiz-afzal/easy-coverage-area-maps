@@ -62,22 +62,9 @@ class CustomFields
                     Field::make('select', Functions::prefix('status'), __('Region Status'))
                         ->set_options(WordPressHooks::get_statuses_as_options())
                         ->set_required(true),
-                    Field::make('complex', Functions::prefix('coordinate_groups'), __('Coordinates'))
+                    Field::make('file', Functions::prefix('coordinates'), __('Coordinates'))
                         ->set_required(true)
-                        ->set_collapsed(true)
-                        ->set_min(3)
-                        ->setup_labels(['plural_name' => 'Coordinates', 'singular_name' => 'Coordinate'])
-                        ->add_fields([
-                            Field::make('text', Functions::prefix('lat'), __('Latitude'))
-                                ->set_width(50)
-                                ->set_required(true)
-                                ->set_attribute('type', 'number'),
-                            Field::make('text', Functions::prefix('long'), __('Longitude'))
-                                ->set_width(50)
-                                ->set_required(true)
-                                ->set_attribute('type', 'number'),
-                        ])
-                        ->set_header_template(Functions::get_template('admin/metaboxes/headers/coordinate-groups.tmpl.php')),
+                        ->set_type(['json', 'geojson']),
                 ])
                 ->set_header_template(Functions::get_template('admin/metaboxes/headers/regions.tmpl.php')),
         ]);
