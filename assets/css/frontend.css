@@ -2,12 +2,10 @@
 	width: 100%;
 	max-width: 100%;
 	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
+	flex-direction: column;
 	gap: 20px;
 }
 .ecap-map-main .ecap-status-wrapper {
-	width: 230px;
 	display: flex;
 	flex-direction: column;
 	row-gap: 20px;
@@ -55,7 +53,7 @@
 	position: absolute;
 	left: 20px;
 	top: 20px;
-	width: 500px;
+	width: calc(100% - 40px);
 	max-width: 100%;
 }
 .ecap-map-main .ecap-map-wrapper .ecap-autocomplete input[type='text'] {
@@ -80,4 +78,16 @@
 .ecap-point-address p {
 	line-height: 1.2em;
 	font-size: 12px;
+}
+@media (min-width: 1024px) {
+	.ecap-map-main {
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+	.ecap-map-main .ecap-status-wrapper {
+		width: 230px;
+	}
+	.ecap-map-main .ecap-map-wrapper .ecap-autocomplete {
+		width: 500px;
+	}
 }
