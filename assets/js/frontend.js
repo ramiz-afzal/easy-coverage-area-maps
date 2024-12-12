@@ -196,12 +196,15 @@ window.addEventListener(
 								};
 
 								for (const region of regions) {
-									if (!region.coordinate_groups || region.coordinate_groups.length == 0) {
+									if (!region.coordinates || region.coordinates.length == 0) {
 										continue;
 									}
 
-									let polygon = region.coordinate_groups.map((x) => [parseFloat(x.long), parseFloat(x.lat)]); // have to flip the lat/long here for the algo to work
-									matchedRegion = getIsPointInsidePolygon([latitude, longitude], polygon) ? region : null;
+									for (const coordinate_group of region.coordinates) {
+										let polygon = coordinate_group.map((x) => [parseFloat(x[1]), parseFloat(x[0])]); // have to flip the lat/long here for the algo to work
+										matchedRegion = getIsPointInsidePolygon([latitude, longitude], polygon) ? region : null;
+									}
+
 									if (matchedRegion !== null) {
 										break;
 									}

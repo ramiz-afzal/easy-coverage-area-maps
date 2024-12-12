@@ -2,13 +2,13 @@
 
 /**
  * Plugin Name:       Easy Coverage Area Maps
- * Plugin URI:        mailto:m.ramiz.afzal@gmail.com
+ * Plugin URI:        https://kristall.io
  * Description:       Easily display coverage areas of your services on a map
  * Version:           1.0.0
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Author:            Ramiz Afzal
- * Author URI:        mailto:m.ramiz.afzal@gmail.com
+ * Author:            Kristall Studios
+ * Author URI:        https://kristall.io
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  */
