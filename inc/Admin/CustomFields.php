@@ -76,10 +76,62 @@ class CustomFields
         $container = Container::make('post_meta', __('Map Settings'));
         $container->where('post_type', '=', Constant::CPT_CUSTOM_STATUS);
         $container->add_fields([
+            // 
             Field::make('rich_text', Functions::prefix('desc'), __('Status Description'))
                 ->set_required(true),
+            // 
             Field::make('color', Functions::prefix('color'), __('Status Color'))
                 ->set_required(true),
+            // 
+            Field::make('radio', Functions::prefix('has_redirect'), __('Enable Redirect'))
+                ->set_options([
+                    'yes'   => 'Yes',
+                    'no'    => 'No',
+                ])
+                ->set_default_value('no')
+                ->set_required(true),
+            // 
+            Field::make('radio', Functions::prefix('redirect_type'), __('Redirect Type'))
+                ->set_options([
+                    'url'   => 'URL',
+                    'page'  => 'Page',
+                ])
+                ->set_default_value('page')
+                ->set_required(true)
+                ->set_conditional_logic(array(
+                    [
+                        'field' => Functions::prefix('has_redirect'),
+                        'value' => 'yes'
+                    ],
+                )),
+            // 
+            Field::make('text', Functions::prefix('redirect_url'), 'Redirect URL')
+                ->set_attribute('type', 'url')
+                ->set_required(true)
+                ->set_conditional_logic(array(
+                    [
+                        'field' => Functions::prefix('has_redirect'),
+                        'value' => 'yes'
+                    ],
+                    [
+                        'field' => Functions::prefix('redirect_type'),
+                        'value' => 'url'
+                    ],
+                )),
+            // 
+            Field::make('select', Functions::prefix('redirect_page'), 'Redirect Page')
+                ->set_options(['' => 'Select'])
+                ->add_options(WordPressHooks::get_posts('page'))
+                ->set_conditional_logic(array(
+                    [
+                        'field' => Functions::prefix('has_redirect'),
+                        'value' => 'yes'
+                    ],
+                    [
+                        'field' => Functions::prefix('redirect_type'),
+                        'value' => 'page'
+                    ],
+                )),
         ]);
     }
 

@@ -226,6 +226,7 @@ window.addEventListener(
 								const userLocation = Radar.ui.marker();
 								Radar.ui.autocomplete({
 									container: autocompleteElement,
+									countryCode: 'US',
 									onSelection: async (address) => {
 										const { latitude, longitude, formattedAddress } = address;
 										const intersectingRegion = getAddressRegion(latitude, longitude);
@@ -249,6 +250,22 @@ window.addEventListener(
 										html += `<div class="ecap-status-desc">${intersectingRegion.status.desc}</div>`;
 										html += '</div>';
 										html += '</div>';
+
+										if (intersectingRegion.status.has_redirect && intersectingRegion.status.has_redirect == 'yes') {
+											let redirectURL = null;
+											if (intersectingRegion.status.redirect_type == 'page' && intersectingRegion.status.redirect_page) {
+												redirectURL = intersectingRegion.status.redirect_page;
+											} else if (intersectingRegion.status.redirect_type == 'url' && intersectingRegion.status.redirect_url) {
+												redirectURL = intersectingRegion.status.redirect_url;
+											}
+
+											if (redirectURL) {
+												html += `<div class="ecap-cta-wrap">`;
+												html += `<p>Inquire about a connection today</p>`;
+												html += `<a class="ecap-cta-button" href="${redirectURL}" role="button">Inquire</a>`;
+												html += `</div>`;
+											}
+										}
 
 										// append popup
 										userLocation.setPopup(Radar.ui.popup({ html: html }));
