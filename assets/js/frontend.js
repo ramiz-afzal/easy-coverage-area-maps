@@ -262,7 +262,7 @@ window.addEventListener(
 											if (redirectURL) {
 												html += `<div class="ecap-cta-wrap">`;
 												html += `<p>Inquire about a connection today</p>`;
-												html += `<a class="ecap-cta-button" href="${redirectURL}" role="button">Inquire</a>`;
+												html += `<a class="ecap-cta-button" href="${redirectURL}" role="button">Residential Application</a>`;
 												html += `</div>`;
 											}
 										}
