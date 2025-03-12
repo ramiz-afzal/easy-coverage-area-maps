@@ -203,6 +203,10 @@ window.addEventListener(
 									for (const coordinate_group of region.coordinates) {
 										let polygon = coordinate_group.map((x) => [parseFloat(x[1]), parseFloat(x[0])]); // have to flip the lat/long here for the algo to work
 										matchedRegion = getIsPointInsidePolygon([latitude, longitude], polygon) ? region : null;
+
+										if (matchedRegion !== null) {
+											break;
+										}
 									}
 
 									if (matchedRegion !== null) {
