@@ -49,18 +49,18 @@ if (!window.ecap) {
 				throw new Error(error.message ? error.message : 'An error ocurred');
 			}
 		},
-		async getMapRegions(mapId = null) {
+		async getMapData(mapId = null) {
 			try {
 				if (!mapId) {
 					return [];
 				}
 
-				let response = await this.ajax('ecap_get_map_regions', { post_id: mapId });
-				if (!response || !response.regions) {
+				let response = await this.ajax('ecap_get_map_data', { post_id: mapId });
+				if (!response) {
 					return [];
 				}
 
-				return response.regions;
+				return response;
 			} catch (error) {
 				throw new Error(error.message ? error.message : 'An error ocurred');
 			}
@@ -80,87 +80,121 @@ if (!window.ecap) {
 window.addEventListener(
 	'DOMContentLoaded',
 	async function () {
-		/**
-		 * Init Radar maps
-		 */
-		if ((Radar && easyCoverageAreaMapsAjax) || easyCoverageAreaMapsAjax.radar_pk) {
+		try {
+			const mapWrappers = document.querySelectorAll('.ecap-map');
+			if (!mapWrappers || mapWrappers.length == 0) {
+				return;
+			}
+
+			if (!Radar || !easyCoverageAreaMapsAjax || !easyCoverageAreaMapsAjax.radar_pk) {
+				console.error('Radar and Ajax dependencies not available');
+				return;
+			}
+
+			// Initialize Radar
 			Radar.initialize(easyCoverageAreaMapsAjax.radar_pk);
-			let mapWrappers = this.document.querySelectorAll('.ecap-map');
-			if (mapWrappers.length) {
-				let regionStatuses = await ecap.getRegionStatuses();
-				mapWrappers.forEach(async function (mapWrapper) {
-					try {
-						let mapId = mapWrapper.dataset.mapId;
-						let regions = await ecap.getMapRegions(mapId);
-						const map = Radar.ui.map({
-							container: mapWrapper,
-							style: 'radar-default-v1',
-							center: [-73.9911, 40.7342], // NYC
-							zoom: 10,
+
+			for (let i = 0; i < mapWrappers.length; i++) {
+				const mapWrapper = mapWrappers[i];
+				const mapId = mapWrapper.dataset.mapId;
+				if (!mapId) {
+					console.error('map wrapper has invalid map ID');
+					continue;
+				}
+
+				const mapData = await ecap.getMapData(mapId);
+				if (!mapData.type || !['regions', 'points'].includes(mapData.type)) {
+					console.error('map wrapper has invalid map type');
+					continue;
+				}
+
+				// Initialize Map
+				const map = Radar.ui.map({
+					container: mapWrapper,
+					style: 'radar-default-v1',
+					center: [-73.9911, 40.7342], // NYC
+					zoom: 10,
+				});
+
+				map.on('load', async function () {
+					// TODO for debugging
+					let currentURL = new URL(window.location.href);
+					if (currentURL.searchParams.has('debug')) {
+						map.on('click', (e) => {
+							const { lng, lat } = e.lngLat;
+							console.log('lat', lat);
+							console.log('long', lng);
 						});
+					}
 
-						map.on('load', () => {
-							// TODO for debugging
-							let currentURL = new URL(window.location.href);
-							if (currentURL.searchParams.has('debug')) {
-								map.on('click', (e) => {
-									const { lng, lat } = e.lngLat;
-									console.log('lat', lat);
-									console.log('long', lng);
+					if (mapData.type === 'regions' && mapData.regions) {
+						const regionStatuses = await ecap.getRegionStatuses();
+						if (regionStatuses) {
+							/**
+							 * Setup status markup
+							 */
+							let statusWrapperElements = document.querySelectorAll('.ecap-status-wrapper');
+							if (statusWrapperElements.length > 0 && regionStatuses && regionStatuses.length > 0) {
+								statusWrapperElements.forEach(function (wrapper) {
+									wrapper.innerHTML = '';
+									Array.from(regionStatuses).forEach(function (status) {
+										let html = '';
+										html += `<div class="ecap-region-status" data-status-id="${status.ID}" style="border-color: ${status.color};">`;
+										html += '<div class="ecap-status-content">';
+										html += `<h3 class="ecap-status-title">${status.title}</h3>`;
+										html += `<div class="ecap-status-desc">${status.desc}</div>`;
+										html += '</div>';
+										html += '</div>';
+										wrapper.innerHTML += html;
+									});
 								});
 							}
 
-							// if region and statuses data exists
-							if (regions && regions.length !== 0 && regionStatuses && regionStatuses.length !== 0) {
-								// setup regions
-								regions.forEach(async function (region) {
-									let coordinates = region.coordinates ? region.coordinates : [];
-									if (coordinates.length !== 0) {
-										let polygonId = ecap.guid();
-										const geojson = {
-											type: 'Feature',
-											id: polygonId,
-											properties: {
-												name: region.title,
-											},
-											geometry: {
-												type: 'Polygon',
-												coordinates: coordinates,
-											},
-										};
+							// setup regions
+							Array.from(mapData.regions).forEach(async function (region) {
+								let coordinates = region.coordinates ? region.coordinates : [];
+								if (coordinates.length !== 0) {
+									let polygonId = ecap.guid();
+									const geojson = {
+										type: 'Feature',
+										id: polygonId,
+										properties: {
+											name: region.title,
+										},
+										geometry: {
+											type: 'Polygon',
+											coordinates: coordinates,
+										},
+									};
 
-										let regionsStatus = Array.from(regionStatuses).find((x) => x.ID == region.status);
+									let regionsStatus = Array.from(regionStatuses).find((x) => x.ID == region.status);
 
-										let polygonConfig = {
-											'fill-opacity': 0.4,
-											'border-width': 1,
-											'fill-color': regionsStatus && regionsStatus.color ? regionsStatus.color : 'blue',
-											'border-color': regionsStatus && regionsStatus.color ? regionsStatus.color : 'blue',
-										};
+									let polygonConfig = {
+										'fill-opacity': 0.4,
+										'border-width': 1,
+										'fill-color': regionsStatus && regionsStatus.color ? regionsStatus.color : 'blue',
+										'border-color': regionsStatus && regionsStatus.color ? regionsStatus.color : 'blue',
+									};
 
-										const feature = await map.addPolygon(geojson, { paint: polygonConfig });
+									const feature = await map.addPolygon(geojson, { paint: polygonConfig });
 
-										feature.on('click', ({ feature, originalEvent: event }) => {
-											Radar.ui
-												.popup({
-													text: feature.properties.name,
-												})
-												.setLngLat([event.lngLat.lng, event.lngLat.lat])
-												.addTo(map);
-										});
-									}
-								});
-
-								// fit the map bounds to the features
-								map.fitToFeatures({ padding: 40 });
-							}
+									feature.on('click', ({ feature, originalEvent: event }) => {
+										Radar.ui
+											.popup({
+												text: feature.properties.name,
+											})
+											.setLngLat([event.lngLat.lng, event.lngLat.lat])
+											.addTo(map);
+									});
+								}
+							});
 
 							/**
 							 * Helper function
 							 * Check if user's selected address exists within one of our defined regions
 							 */
 							const getAddressRegion = function (latitude, longitude) {
-								if (!regions || regions.length == 0) {
+								if (!mapData.regions || mapData.regions.length == 0) {
 									return false;
 								}
 
@@ -195,7 +229,7 @@ window.addEventListener(
 									return inside;
 								};
 
-								for (const region of regions) {
+								for (const region of mapData.regions) {
 									if (!region.coordinates || region.coordinates.length == 0) {
 										continue;
 									}
@@ -281,32 +315,45 @@ window.addEventListener(
 									},
 								});
 							}
-						}); // map onLoad
-					} catch (error) {
-						console.log(error);
-					}
-				});
+						}
+					} else if (mapData.type === 'points' && mapData.points && mapData.points.features) {
+						const image = await map.loadImage(`${easyCoverageAreaMapsAjax.asset_url}/pole-icon.png`);
+						map.addImage('pole-marker', image.data);
 
-				/**
-				 * Setup status markup
-				 */
-				let statusWrapperElements = this.document.querySelectorAll('.ecap-status-wrapper');
-				if (statusWrapperElements.length > 0 && regionStatuses && regionStatuses.length > 0) {
-					statusWrapperElements.forEach(function (wrapper) {
-						wrapper.innerHTML = '';
-						Array.from(regionStatuses).forEach(function (status) {
-							let html = '';
-							html += `<div class="ecap-region-status" data-status-id="${status.ID}" style="border-color: ${status.color};">`;
-							html += '<div class="ecap-status-content">';
-							html += `<h3 class="ecap-status-title">${status.title}</h3>`;
-							html += `<div class="ecap-status-desc">${status.desc}</div>`;
-							html += '</div>';
-							html += '</div>';
-							wrapper.innerHTML += html;
+						await map.addSource('vendor-poles', {
+							type: 'geojson',
+							data: mapData.points,
 						});
-					});
-				}
+
+						let featureId = ecap.guid();
+						await map.addLayer({
+							id: featureId,
+							type: 'symbol',
+							source: 'vendor-poles',
+							layout: {
+								'icon-image': 'pole-marker',
+								'text-field': ['get', 'name'],
+								'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+								'text-offset': [0, 1.25],
+								'text-anchor': 'top',
+							},
+						});
+
+						const pointsBounds = new Radar.ui.maplibregl.LngLatBounds();
+						Array.from(mapData.points.features).forEach(function (point) {
+							const [x, y] = point.geometry.coordinates;
+							pointsBounds.extend([x, y]);
+						});
+
+						map.fitBounds(pointsBounds, { padding: 40 });
+					}
+
+					// fit the map bounds to the features
+					map.fitToFeatures({ padding: 40 });
+				});
 			}
+		} catch (error) {
+			console.log(error);
 		}
 	},
 	false

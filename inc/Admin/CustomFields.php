@@ -51,6 +51,16 @@ class CustomFields
         $container = Container::make('post_meta', __('Map Settings'));
         $container->where('post_type', '=', Constant::CPT_CUSTOM_AREA_MAPS);
         $container->add_fields([
+            // 
+            Field::make('radio', Functions::prefix('type'), __('Map Type'))
+                ->set_options([
+                    'regions'   => 'Regions',
+                    'points'    => 'Points',
+                ])
+                ->set_default_value('regions')
+                ->set_required(true),
+
+            // 
             Field::make('complex', Functions::prefix('regions'), __('Regions'))
                 ->set_required(true)
                 ->set_collapsed(true)
@@ -66,7 +76,24 @@ class CustomFields
                         ->set_required(true)
                         ->set_type(['json', 'geojson']),
                 ])
-                ->set_header_template(Functions::get_template('admin/metaboxes/headers/regions.tmpl.php')),
+                ->set_header_template(Functions::get_template('admin/metaboxes/headers/regions.tmpl.php'))
+                ->set_conditional_logic(array(
+                    [
+                        'field' => Functions::prefix('type'),
+                        'value' => 'regions'
+                    ],
+                )),
+
+            // 
+            Field::make('file', Functions::prefix('points'), __('Points'))
+                ->set_required(true)
+                ->set_type(['json', 'geojson'])
+                ->set_conditional_logic(array(
+                    [
+                        'field' => Functions::prefix('type'),
+                        'value' => 'points'
+                    ],
+                )),
         ]);
     }
 

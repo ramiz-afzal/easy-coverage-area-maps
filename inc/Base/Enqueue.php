@@ -46,7 +46,7 @@ class Enqueue
         wp_register_script(Functions::with_uuid('radar-script'), 'https://js.radar.com/v4.4.0/radar.min.js', [], Functions::get_uuid(), false);
 
         if (Variable::GET('LOCALIZE_JS_OBJECT')) {
-            $script_variables = ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('ajax_security')];
+            $script_variables = ['ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('ajax_security'), 'asset_url' => Variable::GET('URL') . 'assets/img'];
             $api_keys = RadarApi::get_api_keys();
             if (!empty($api_keys) && isset($api_keys['public_key'])) {
                 $script_variables['radar_pk'] = $api_keys['public_key'];
